@@ -47,13 +47,13 @@ kotlin {
 }
 
 openApiGenerate {
-    val openapiGroup = "${rootProject.group}.api.v2"
+    val openapiGroup = "${rootProject.group}.api.v1"
     generatorName.set("kotlin") // Это и есть активный генератор
     packageName.set(openapiGroup)
     apiPackage.set("$openapiGroup.api")
     modelPackage.set("$openapiGroup.models")
     invokerPackage.set("$openapiGroup.invoker")
-    inputSpec.set("$rootDir/specs/schema.yaml")
+    inputSpec.set("$rootDir/specs/schema-v1.yaml")
     library.set("multiplatform") // Используем библиотеку для KMP
 
     /**

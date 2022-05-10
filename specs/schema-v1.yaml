@@ -315,7 +315,6 @@ components:
           example: 1
         uuid:
           type: string
-          format: uuid
           example: '346e02c6-d5c4-4f6b-94d9-5a718e42d0ca'
 
     BlockToUpdate:
@@ -348,7 +347,6 @@ components:
           example: 1
         uuid:
           type: string
-          format: uuid
           example: '346e02c6-d5c4-4f6b-94d9-5a718e42d0ca'
         title:
           type: string
@@ -357,7 +355,7 @@ components:
           type: string
           example: 'Ivan Petrov'
         dates:
-          $ref: '#components/schemas/Date'
+          $ref: '#components/schemas/Dates'
         content:
           type: string
           description: Content full from WYSIWYG
@@ -376,7 +374,6 @@ components:
           example: 1
         uuid:
           type: string
-          format: uuid
           example: '346e02c6-d5c4-4f6b-94d9-5a718e42d0ca'
         title:
           type: string
@@ -385,22 +382,22 @@ components:
           type: string
           example: 'Ivan Petrov'
         dates:
-          $ref: '#components/schemas/Date'
+          $ref: '#components/schemas/Dates'
         contentPreview:
           type: string
           description: Content preview from WYSIWYG
           example: '<p>Lorem <strong>ipsum</strong><p> ...'
 
-    Date:
+    Dates:
       type: object
       properties:
         created:
           type: string
-          format: date-time
+          format: string
           example: '2021-01-30T08:30:00Z'
         updated:
           type: string
-          format: date-time
+          format: string
           example: '2021-01-30T08:30:00Z'
 
 #    BlocksList:

@@ -22,3 +22,4 @@ pluginManagement {
 //include("m1l2")
 //include("m1l4-dsl")
 include("easystory-api-kmp")
+include("easystory-api-jackson")
