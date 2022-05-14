@@ -23,3 +23,5 @@ pluginManagement {
 //include("m1l4-dsl")
 include("easystory-api-kmp")
 include("easystory-api-jackson")
+include("easystory-common")
+include("easystory-mappers-v1")

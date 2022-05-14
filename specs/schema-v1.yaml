@@ -14,26 +14,6 @@ tags:
   - name: private
     description: Private EasyStory API
 paths:
-#  /blocks:
-#    post:
-#      tags:
-#        - public
-#      summary: get blocks list
-#      operationId: getBlocks
-#      description: Get blocks
-#      requestBody:
-#        description: Request body for getting blocks
-#        content:
-#          application/json:
-#            schema:
-#              $ref: ''
-#      responses:
-#        200:
-#          description: List of blocks
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#components/schemas/BlocksList'
   /blocks/read:
     post:
       tags:
@@ -133,14 +113,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#components/schemas/BlockSearchRequest'
+              $ref: '#/components/schemas/BlockSearchRequest'
       responses:
         200:
           description: Response after searched
           content:
             application/json:
               schema:
-                $ref: '#components/schemas/BlockSearchResponse'
+                $ref: '#/components/schemas/BlockSearchResponse'
 
 
 components:
@@ -210,7 +190,6 @@ components:
 
       discriminator:
         propertyName: responseType
-#        TODO: provide with correct values
         mapping:
           create: '#/components/schemas/BlockCreateResponse'
           read: '#/components/schemas/BlockReadResponse'
@@ -264,9 +243,16 @@ components:
         - $ref: '#/components/schemas/BlockRequestDebug'
         - type: object
           properties:
-            searchString:
-              type: string
-              description: строка для поиска
+             filter:
+               $ref: '#/components/schemas/BlockFilter'
+
+    BlockFilter:
+      type: object
+      description: Фильтр
+      properties:
+        searchString:
+          type: string
+          description: строка для поиска
 
     BaseBlockResponse:
       allOf:
@@ -276,6 +262,15 @@ components:
             block:
               $ref: '#/components/schemas/BlockResponseObject'
 
+    ReadBlockResponse:
+      allOf:
+        - type: object
+          description: Block response for reading
+          properties:
+            block:
+              allOf:
+                - $ref: '#/components/schemas/BlockReadResponseObject'
+
     BlockCreateResponse:
       allOf:
         - $ref: '#/components/schemas/IResponse'
@@ -284,7 +279,7 @@ components:
     BlockReadResponse:
       allOf:
         - $ref: '#/components/schemas/IResponse'
-        - $ref: '#/components/schemas/BaseBlockResponse'
+        - $ref: '#/components/schemas/ReadBlockResponse'
 
     BlockUpdateResponse:
       allOf:
@@ -317,6 +312,12 @@ components:
           type: string
           example: '346e02c6-d5c4-4f6b-94d9-5a718e42d0ca'
 
+    BlockReadResponseObject:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BlockResponseObject'
+        - $ref: '#/components/schemas/BlockCurrent'
+
     BlockToUpdate:
       allOf:
         - $ref: '#/components/BlockToAddOrUpdate'
@@ -339,55 +340,6 @@ components:
           description: Content full from WYSIWYG
           example: '<p>Lorem <strong>ipsum</strong><p>'
 
-    BlockCurrent:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1
-        uuid:
-          type: string
-          example: '346e02c6-d5c4-4f6b-94d9-5a718e42d0ca'
-        title:
-          type: string
-          example: 'FairyTail'
-        author:
-          type: string
-          example: 'Ivan Petrov'
-        dates:
-          $ref: '#components/schemas/Dates'
-        content:
-          type: string
-          description: Content full from WYSIWYG
-          example: '<p>Lorem <strong>ipsum</strong><p>'
-        descendants:
-          type: array
-          items:
-            $ref: '#components/schemas/Block'
-
-
-    Block:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1
-        uuid:
-          type: string
-          example: '346e02c6-d5c4-4f6b-94d9-5a718e42d0ca'
-        title:
-          type: string
-          example: 'FairyTail'
-        author:
-          type: string
-          example: 'Ivan Petrov'
-        dates:
-          $ref: '#components/schemas/Dates'
-        contentPreview:
-          type: string
-          description: Content preview from WYSIWYG
-          example: '<p>Lorem <strong>ipsum</strong><p> ...'
-
     Dates:
       type: object
       properties:
@@ -400,10 +352,21 @@ components:
           format: string
           example: '2021-01-30T08:30:00Z'
 
-#    BlocksList:
-#      type: array
-#      items:
-#        $ref: '#components/schemas/Block'
+    BlockCurrent:
+      allOf:
+        - $ref: '#/components/schemas/Dates'
+        - type: object
+          properties:
+            title:
+              type: string
+              example: 'FairyTail'
+            author:
+              type: string
+              example: 'Ivan Petrov'
+            content:
+              type: string
+              description: Content full from WYSIWYG
+              example: '<p>Lorem <strong>ipsum</strong><p>'
 
     BlockRequestDebug:
       type: object
@@ -426,5 +389,7 @@ components:
         - success
         - notFound
         - badId
+        - badTitle
+        - badContent
         - cannotDelete
         - badSearchString
