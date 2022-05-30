@@ -1,0 +1,395 @@
+openapi: 3.0.0
+info:
+  description: EasyStory API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: "0.0.1"
+  title: EasyStory API
+servers:
+  - url: http://localhost/v1
+tags:
+  - name: public
+    description: Public EasyStory API
+  - name: private
+    description: Private EasyStory API
+paths:
+  /blocks/read:
+    post:
+      tags:
+        - public
+      summary: get particular block
+      operationId: getBlock
+      description: get particular block
+      requestBody:
+        description: Request body for getting block
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockReadRequest'
+      responses:
+        200:
+          description: Current block
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockReadRequest'
+  /blocks/create:
+    post:
+      tags:
+        - private
+      summary: add new block
+      operationId: addBlock
+      description: adding block by author to DB
+      requestBody:
+        description: author, title and content
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/BlockCreateRequest'
+      responses:
+        200:
+          description: response after created
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/BlockCreateResponse'
+
+  /blocks/update:
+    post:
+      tags:
+        - private
+      summary: update block
+      operationId: updateBlock
+      description: updating block by author to DB
+      requestBody:
+        description: Request body for updating
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/BlockUpdateRequest'
+      responses:
+        200:
+          description: Response after updated
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/BlockUpdateResponse'
+
+  /blocks/delete:
+    post:
+      tags:
+        - private
+      summary: delete block
+      operationId: deleteBlock
+      description: deletion block by author to DB
+      requestBody:
+        description: Request body for deletion
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/BlockUpdateRequest'
+      responses:
+        200:
+          description: Response after deletion
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/BlockUpdateResponse'
+
+  /blocks/search:
+    post:
+      tags:
+        - public
+      summary: search blocks
+      operationId: searchBlocks
+      description: search block by author to DB
+      requestBody:
+        description: Request body for searching blocks
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockSearchRequest'
+      responses:
+        200:
+          description: Response after searched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockSearchResponse'
+
+
+components:
+  schemas:
+
+    BlockRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    IRequest:
+      type: object
+      properties:
+        requestType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/BlockCreateRequest'
+          read: '#/components/schemas/BlockReadRequest'
+          update: '#/components/schemas/BlockUpdateRequest'
+          delete: '#/components/schemas/BlockDeleteRequest'
+          search: '#/components/schemas/BlockSearchRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дескриминатор для вычисления типа ответа
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор ответа для отладки
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/BlockCreateResponse'
+          read: '#/components/schemas/BlockReadResponse'
+          update: '#/components/schemas/BlockUpdateResponse'
+          delete: '#/components/schemas/BlockDeleteResponse'
+          search: '#/components/schemas/BlockSearchResponse'
+
+
+    BlockCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/BlockRequestDebug'
+        - type: object
+          properties:
+            block:
+              $ref: '#/components/schemas/BlockToAddOrUpdate'
+
+    BlockReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/BlockRequestDebug'
+        - $ref: '#/components/schemas/BaseBlockIdRequest'
+
+    BaseBlockIdRequest:
+      type: object
+      properties:
+        block:
+          type: object
+          properties:
+            id:
+              type: string
+
+    BlockUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/BlockRequestDebug'
+        - type: object
+          properties:
+            block:
+              $ref: '#/components/schemas/BlockToUpdate'
+
+    BlockDeleteRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/BlockRequestDebug'
+        - $ref: '#/components/schemas/BaseBlockIdRequest'
+
+    BlockSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/BlockRequestDebug'
+        - type: object
+          properties:
+             filter:
+               $ref: '#/components/schemas/BlockFilter'
+
+    BlockFilter:
+      type: object
+      description: Фильтр
+      properties:
+        searchString:
+          type: string
+          description: строка для поиска
+
+    BaseBlockResponse:
+      allOf:
+        - type: object
+          description: Definition with prop for block response
+          properties:
+            block:
+              $ref: '#/components/schemas/BlockResponseObject'
+
+    ReadBlockResponse:
+      allOf:
+        - type: object
+          description: Block response for reading
+          properties:
+            block:
+              allOf:
+                - $ref: '#/components/schemas/BlockReadResponseObject'
+
+    BlockCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/BaseBlockResponse'
+
+    BlockReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/ReadBlockResponse'
+
+    BlockUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/BaseBlockResponse'
+
+    BlockDeleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/BaseBlockResponse'
+
+    BlockSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - type: object
+          description: Список блоков
+          properties:
+            blocks:
+              type: array
+              items:
+                $ref: '#/components/schemas/BlockResponseObject'
+
+    BlockResponseObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        uuid:
+          type: string
+          example: '346e02c6-d5c4-4f6b-94d9-5a718e42d0ca'
+
+    BlockReadResponseObject:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BlockResponseObject'
+        - $ref: '#/components/schemas/BlockCurrent'
+
+    BlockToUpdate:
+      allOf:
+        - $ref: '#/components/BlockToAddOrUpdate'
+        - type: object
+          properties:
+            id:
+              type: string
+
+    BlockToAddOrUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          example: 'FairyTail'
+        author:
+          type: string
+          example: 'Ivan Petrov'
+        content:
+          type: string
+          description: Content full from WYSIWYG
+          example: '<p>Lorem <strong>ipsum</strong><p>'
+
+    Dates:
+      type: object
+      properties:
+        created:
+          type: string
+          format: string
+          example: '2021-01-30T08:30:00Z'
+        updated:
+          type: string
+          format: string
+          example: '2021-01-30T08:30:00Z'
+
+    BlockCurrent:
+      allOf:
+        - $ref: '#/components/schemas/Dates'
+        - type: object
+          properties:
+            title:
+              type: string
+              example: 'FairyTail'
+            author:
+              type: string
+              example: 'Ivan Petrov'
+            content:
+              type: string
+              description: Content full from WYSIWYG
+              example: '<p>Lorem <strong>ipsum</strong><p>'
+
+    BlockRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/BlockDebug'
+
+    BlockDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/BlockRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/BlockRequestDebugStubs'
+
+    BlockRequestDebugStubs:
+      type: string
+      description: Перечисления всех заглушек
+      enum:
+        - success
+        - notFound
+        - badId
+        - badTitle
+        - badContent
+        - cannotDelete
+        - badSearchString
