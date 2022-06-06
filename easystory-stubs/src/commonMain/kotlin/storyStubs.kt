@@ -1,0 +1,33 @@
+package easystory.stubs
+
+import ru.otus.otuskotlin.easystory.common.models.*
+import java.time.LocalDateTime
+
+object Story {
+    private fun stub() = ESBlock(
+        id = ESBlockId(id = "321"),
+        uuid = "346e02c6-d5c4-4f6b-94d9-5a718e42d0ca",
+        title = "FairyTail",
+        author = "Steven King",
+        content = "<h2>Shining</h2><p>Once upon a time...</p>",
+        creationDate = LocalDateTime.now(),
+        updatedDate = LocalDateTime.now()
+    )
+
+    fun getBlock(block: (ESBlock.() -> Unit)? = null) = block?.let {
+        stub().apply(it)
+    } ?: stub()
+
+    fun getBlocks() = listOf(
+        stub(),
+        stub()
+    )
+
+    fun ESBlock.update(newBlock: ESBlock) = apply {
+        title = newBlock.title
+        author = newBlock.author
+        content = newBlock.content
+        creationDate = LocalDateTime.now()
+        updatedDate = LocalDateTime.now()
+    }
+}

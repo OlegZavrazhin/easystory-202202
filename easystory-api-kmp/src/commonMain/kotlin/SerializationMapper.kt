@@ -1,10 +1,10 @@
-package ru.otus.otuskotlin.easystory.api.v1
+package ru.otus.otuskotlin.easystory.app.v1
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import ru.otus.otuskotlin.easystory.api.v1.models.*
+import ru.otus.otuskotlin.easystory.app.v1.models.*
 
 // here I have questions about how it works
 @OptIn(ExperimentalSerializationApi::class)

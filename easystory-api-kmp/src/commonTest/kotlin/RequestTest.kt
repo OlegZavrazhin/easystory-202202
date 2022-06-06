@@ -1,7 +1,7 @@
-package ru.otus.otuskotlin.easystory.api.v1
+package ru.otus.otuskotlin.easystory.app.v1
 
-import ru.otus.otuskotlin.easystory.api.v1.models.BlockCreateRequest
-import ru.otus.otuskotlin.easystory.api.v1.models.BlockToAddOrUpdate
+import ru.otus.otuskotlin.easystory.app.v1.models.BlockCreateRequest
+import ru.otus.otuskotlin.easystory.app.v1.models.BlockToAddOrUpdate
 import kotlin.test.assertContains
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -1,4 +1,4 @@
-package ru.otus.otuskotlin.easystory.api
+package ru.otus.otuskotlin.easystory.app
 
 import com.fasterxml.jackson.databind.ObjectMapper
 

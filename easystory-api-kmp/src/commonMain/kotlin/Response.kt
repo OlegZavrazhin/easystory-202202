@@ -1,6 +1,6 @@
-package ru.otus.otuskotlin.easystory.api.v1
+package ru.otus.otuskotlin.easystory.app.v1
 
-import ru.otus.otuskotlin.easystory.api.v1.models.IResponse
+import ru.otus.otuskotlin.easystory.app.v1.models.IResponse
 
 fun responseSerialize(response: IResponse): String = serializationMapper.encodeToString(BlockResponseSerializer, response)
 
