@@ -1,5 +1,5 @@
 import org.junit.Test
-import ru.otus.otuskotlin.easystory.app.v1.models.*
+import ru.otus.otuskotlin.easystory.api.v1.models.*
 import ru.otus.otuskotlin.easystory.common.EasyStoryContext
 import ru.otus.otuskotlin.easystory.common.models.*
 import ru.otus.otuskotlin.easystory.mappers.jackson.fromTransport

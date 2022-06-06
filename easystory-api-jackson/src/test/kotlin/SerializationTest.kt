@@ -1,8 +1,8 @@
-package ru.otus.otuskotlin.easystory.app.v1
+package ru.otus.otuskotlin.easystory.api.v1
 
 import org.junit.Test
-import ru.otus.otuskotlin.easystory.app.jacksonMapper
-import ru.otus.otuskotlin.easystory.app.v1.models.*
+import ru.otus.otuskotlin.easystory.api.jacksonMapper
+import ru.otus.otuskotlin.easystory.api.v1.models.*
 import kotlin.test.assertContains
 
 class SerializationTest {

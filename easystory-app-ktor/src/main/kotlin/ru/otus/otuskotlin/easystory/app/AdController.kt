@@ -3,7 +3,7 @@ package ru.otus.otuskotlin.easystory.app
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import ru.otus.otuskotlin.easystory.app.v1.models.*
+import ru.otus.otuskotlin.easystory.api.v1.models.*
 import ru.otus.otuskotlin.easystory.services.BlockService
 import ru.otus.otuskotlin.easystory.common.EasyStoryContext
 import ru.otus.otuskotlin.easystory.mappers.jackson.*

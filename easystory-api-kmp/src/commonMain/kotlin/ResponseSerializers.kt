@@ -1,7 +1,7 @@
-package ru.otus.otuskotlin.easystory.app.v1
+package ru.otus.otuskotlin.easystory.api.v1
 
-import ru.otus.otuskotlin.easystory.app.ResponseSerializer
-import ru.otus.otuskotlin.easystory.app.v1.models.*
+import ru.otus.otuskotlin.easystory.api.ResponseSerializer
+import ru.otus.otuskotlin.easystory.api.v1.models.*
 
 internal object ResponseSerializers {
     val create = ResponseSerializer(BlockCreateResponse.serializer())
