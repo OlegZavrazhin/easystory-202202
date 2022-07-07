@@ -6,6 +6,7 @@ pluginManagement {
         val kotlinVersion: String by settings
         val kotestVersion: String by settings
         val openapiVersion: String by settings
+        val bmuschkoVersion: String by settings
 //        val serializationVersion: String by settings
 
 //        apply false means not to apply to current project and use the plugins in subprojects without version
@@ -13,6 +14,7 @@ pluginManagement {
         kotlin("multiplatfrom") version kotlinVersion apply false
         id("io.kotest.multiplatform") version kotestVersion apply false
         kotlin("plugin.serialization") version kotlinVersion apply false
+        id("com.bmuschko.docker-java-application") version bmuschkoVersion apply false
 
         id("org.openapi.generator") version openapiVersion apply false
     }
@@ -25,3 +27,6 @@ include("easystory-api-kmp")
 include("easystory-api-jackson")
 include("easystory-common")
 include("easystory-mappers-v1")
+include("easystory-stubs")
+include("easystory-services")
+include("easystory-app-ktor")

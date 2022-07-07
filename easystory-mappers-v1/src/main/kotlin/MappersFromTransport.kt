@@ -3,7 +3,7 @@ package ru.otus.otuskotlin.easystory.mappers.jackson
 import ru.otus.otuskotlin.easystory.api.v1.models.*
 import ru.otus.otuskotlin.easystory.common.EasyStoryContext
 import ru.otus.otuskotlin.easystory.common.models.*
-import ru.otus.otuskotlin.marketplace.mappers.jackson.exceptions.UnknownRequestClass
+import ru.otus.otuskotlin.easystory.mappers.jackson.exceptions.UnknownRequestClass
 
 fun EasyStoryContext.fromTransport(request: IRequest) = when (request) {
     is BlockCreateRequest -> fromTransport(request)
