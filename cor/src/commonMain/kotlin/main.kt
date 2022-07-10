@@ -69,19 +69,6 @@ fun <T> ICorChainDsl<T>.worker(function: CorWorkerDsl<T>.() -> Unit) {
     add(CorWorkerDsl<T>().apply(function))
 }
 
-// if we have to pass new constructor
-//fun <T> ICorChainDsl<T>.worker(
-//    title: String,
-//    function: suspend T.() -> Unit
-//) {
-//    add(
-//        CorWorkerDsl<T>().apply {
-//            this.title = title
-//            this.handle(function)
-//        }
-//    )
-//}
-
 class CorWorkerDsl<T>(
     override var title: String = "",
     var blockOn: suspend T.() -> Boolean = { true },

@@ -35,12 +35,6 @@ class ChainTest {
                 }
                 except { status = Statuses.ERROR }
             }
-//            worker(
-//                title = "Second worker"
-//            ) {
-//                on { status == Statuses.RUNNING }
-//                handle {  }
-//            }
             chain {
                 on {
                     infoInt == 1;
