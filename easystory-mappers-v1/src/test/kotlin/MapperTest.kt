@@ -66,7 +66,7 @@ class MapperTest {
                     message = "id is not found"
                 )
             ),
-            state = ESState.FAILED
+            state = CORState.FAILING
         )
 
         val response = context.toTransportBlock() as BlockReadResponse
