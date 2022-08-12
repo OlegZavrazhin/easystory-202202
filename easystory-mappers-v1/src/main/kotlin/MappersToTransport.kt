@@ -18,35 +18,35 @@ fun EasyStoryContext.toTransportBlock(): IResponse = when (val proc = process) {
 
 fun EasyStoryContext.toTransportCreate() = BlockCreateResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == ESState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == CORState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     block = blockResponse.toTransportBlock()
 )
 
 fun EasyStoryContext.toTransportRead() = BlockReadResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == ESState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == CORState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     block = blockResponse.toTransportReadBlock()
 )
 
 fun EasyStoryContext.toTransportUpdate() = BlockUpdateResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == ESState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == CORState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     block = blockResponse.toTransportBlock()
 )
 
 fun EasyStoryContext.toTransportDelete() = BlockDeleteResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == ESState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == CORState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     block = blockResponse.toTransportBlock()
 )
 
 fun EasyStoryContext.toTransportSearch() = BlockSearchResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == ESState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = if (state == CORState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),
     blocks = blocksResponse.toTransportBlock()
 )

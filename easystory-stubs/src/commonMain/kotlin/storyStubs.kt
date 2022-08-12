@@ -18,7 +18,7 @@ object Story {
         stub().apply(it)
     } ?: stub()
 
-    fun getBlocks() = listOf(
+    fun getBlocks() = mutableListOf(
         stub(),
         stub()
     )
