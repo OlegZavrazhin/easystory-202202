@@ -11,8 +11,7 @@ enum class Statuses {
     NONE,
     RUNNING,
     FAILING,
-    DONE,
-    ERROR
+    FINISHING
 }
 
 data class StubContext(
@@ -29,28 +28,28 @@ class ChainTest {
                 title = "First worker"
                 on { status == Statuses.NONE }
                 handle {
-                    info = "First worker info";
-                    infoInt = 1;
+                    info = "First worker info"
+                    infoInt = 1
                     status = Statuses.RUNNING
                 }
-                except { status = Statuses.ERROR }
+                except { status = Statuses.FAILING }
             }
             chain {
                 on {
-                    infoInt == 1;
-                    info.length < 50;
+                    infoInt == 1
+                    info.length < 50
                 }
                 worker {
                     title = "Second worker"
                     on { infoInt > 0 }
                     handle { infoInt++; info = "Second worker info" }
-                    except { status = Statuses.ERROR }
+                    except { status = Statuses.FAILING }
                 }
                 worker {
                     title = "Third worker"
                     on { infoInt < 5 }
                     handle { infoInt++; info = "Third worker info" }
-                    except { status = Statuses.ERROR }
+                    except { status = Statuses.FAILING }
                 }
             }
 
@@ -61,27 +60,27 @@ class ChainTest {
                 title = "First worker chain2"
                 on { status == Statuses.RUNNING }
                 handle {
-                    info = "First worker info chain2";
-                    infoInt = infoInt++;
+                    info = "First worker info chain2"
+                    infoInt = infoInt++
                 }
-                except { status = Statuses.ERROR }
+                except { status = Statuses.FAILING }
             }
             parallel {
                 on {
-                    (infoInt > 1) && (infoInt < 5);
-                    info.length < 50;
+                    (infoInt > 1) && (infoInt < 5)
+                    info.length < 50
                 }
                 worker {
                     title = "Second worker chain2"
                     on { infoInt > 0 }
                     handle { infoInt++; info = "Second worker info chain2" }
-                    except { status = Statuses.ERROR }
+                    except { status = Statuses.FAILING }
                 }
                 worker {
                     title = "Third worker chain2"
                     on { infoInt < 5 }
                     handle { infoInt++; info = "Third worker info chain2" }
-                    except { status = Statuses.ERROR }
+                    except { status = Statuses.FAILING }
                 }
             }
 
@@ -89,6 +88,7 @@ class ChainTest {
     }
 
     @Test
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
     fun runTest() = runTest {
         val context = StubContext(info = "StubContext")
         val chain = ChainTest.chain
