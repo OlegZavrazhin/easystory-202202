@@ -14,6 +14,7 @@ kotlin {
 
                 implementation(project(":easystory-common"))
                 implementation(project(":easystory-stubs"))
+                implementation(project(":easystory-business-logic"))
             }
         }
         val commonTest by getting {

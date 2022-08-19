@@ -9,7 +9,7 @@ class ResponseTest {
 
     private val blockCreateResponse = BlockCreateResponse(
         block = BlockResponseObject(
-            id = 1,
+            id = "1",
             uuid = "346e02c6-d5c4-4f6b-94d9-5a718e42d0ca"
         )
     )
@@ -25,7 +25,7 @@ class ResponseTest {
     fun deserializationRequestTest() {
         val jsonString = apiResponseSerialize(blockCreateResponse)
         val decodedObj = apiResponseDeserialize<BlockCreateResponse>(jsonString)
-        assertEquals(1, decodedObj.block?.id)
+        assertEquals("1", decodedObj.block?.id)
         assertEquals("346e02c6-d5c4-4f6b-94d9-5a718e42d0ca", decodedObj.block?.uuid)
     }
 

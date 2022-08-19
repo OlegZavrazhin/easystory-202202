@@ -26,12 +26,12 @@ class SerializationTest {
     fun serializationResponseTest() {
         val blockCreateResponse = BlockCreateResponse(
             block = BlockResponseObject(
-                id = 1,
+                id = "1",
                 uuid = "346e02c6-d5c4-4f6b-94d9-5a718e42d0ca"
             )
         )
         val jsonString = jacksonMapper.writeValueAsString(blockCreateResponse)
-        assertContains(jsonString, """"id":1""")
+        assertContains(jsonString, """"id":"1"""")
         assertContains(jsonString, """"uuid":"346e02c6-d5c4-4f6b-94d9-5a718e42d0ca"""")
     }
 
