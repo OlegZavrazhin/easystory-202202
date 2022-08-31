@@ -25,24 +25,24 @@ class KafkaConfig(
         val KAFKA_TOPIC_IN by lazy { System.getenv(KAFKA_TOPIC_IN_VAR) ?: "es-in" }
         val KAFKA_TOPIC_OUT by lazy { System.getenv(KAFKA_TOPIC_OUT_VAR) ?: "es-out" }
     }
+}
 
-    fun createConsumer(): KafkaConsumer<String, String> {
-        val props = Properties().apply {
-            put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, hosts)
-            put(ConsumerConfig.GROUP_ID_CONFIG, groupId)
-            put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
-            put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java)
-            put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java)
-        }
-        return KafkaConsumer<String, String>(props)
+fun KafkaConfig.createConsumer(): KafkaConsumer<String, String> {
+    val props = Properties().apply {
+        put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, hosts)
+        put(ConsumerConfig.GROUP_ID_CONFIG, groupId)
+        put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
+        put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java)
+        put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer::class.java)
     }
+    return KafkaConsumer<String, String>(props)
+}
 
-    fun createProducer(): KafkaProducer<String, String> {
-        val  props = Properties().apply {
-            put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, hosts)
-            put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer::class.java)
-            put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer::class.java)
-        }
-        return KafkaProducer<String, String>(props)
+fun KafkaConfig.createProducer(): KafkaProducer<String, String> {
+    val  props = Properties().apply {
+        put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, hosts)
+        put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer::class.java)
+        put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer::class.java)
     }
+    return KafkaProducer<String, String>(props)
 }

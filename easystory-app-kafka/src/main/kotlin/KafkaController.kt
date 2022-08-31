@@ -1,18 +1,18 @@
 package ru.otus.otuskotlin.easystory.kafka
 
 import kotlinx.coroutines.*
-import java.util.concurrent.Executors
 
 class KafkaController(private val processors: Set<KafkaProcessor>) {
+    @OptIn(ExperimentalCoroutinesApi::class)
     private val scope = CoroutineScope(
-        Executors.newSingleThreadExecutor().asCoroutineDispatcher() + CoroutineName("kafka-controller")
+        Dispatchers.IO.limitedParallelism(1)
     )
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun start() = scope.launch {
         processors.forEach { processor ->
             launch(
-                Executors.newSingleThreadExecutor()
-                    .asCoroutineDispatcher() + CoroutineName("kafka-process-${processor.config.groupId}")
+                Dispatchers.IO.limitedParallelism(1)
             ) {
                 try {
                     processor.process()

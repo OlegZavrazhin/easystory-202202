@@ -22,6 +22,7 @@ import ru.otus.otuskotlin.easystory.mappers.jackson.toTransportBlock
 import ru.otus.otuskotlin.easystory.services.BlockService
 import java.time.Duration
 import java.util.*
+import kotlinx.atomicfu.atomic
 
 private val log = KotlinLogging.logger {}
 
@@ -31,13 +32,14 @@ class KafkaProcessor(
     private val consumer: Consumer<String, String> = config.createConsumer(),
     private val producer: Producer<String, String> = config.createProducer()
 ) {
+    private val process = atomic(true)
     fun process() = runBlocking {
         try {
             consumer.subscribe(listOf(config.topicIn))
 
             val context = EasyStoryContext(timeStart = Clock.System.now())
 
-            while (true) {
+            while (process.value) {
 
                 val records: ConsumerRecords<String, String> = withContext(Dispatchers.IO) {
                     consumer.poll(Duration.ofSeconds(1))
@@ -84,6 +86,14 @@ class KafkaProcessor(
 
         log.info { "sending ${record.key()} to ${config.topicOut}:\n$json" }
 
-        producer.send(record)
+        runBlocking {
+            withContext(Dispatchers.IO ) {
+                producer.send(record)
+            }
+        }
+    }
+
+    fun stop() {
+        process.value = false
     }
 }

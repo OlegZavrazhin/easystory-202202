@@ -42,6 +42,8 @@ class KafkaTest {
     @AfterTest
     fun stop() {
         controller.stop()
+        processor.stop()
+        kafka.stop()
     }
 
     @Test
