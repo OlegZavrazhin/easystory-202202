@@ -48,7 +48,7 @@ class StubsTests {
         }
         val responseObj = response.body<BlockCreateResponse>()
         assertEquals(200, response.status.value)
-        assertEquals(321, responseObj.block?.id)
+        assertEquals("created block stub", responseObj.block?.id)
     }
 
     @Test
@@ -69,7 +69,7 @@ class StubsTests {
         }
         val responseObj = response.body<BlockReadResponse>()
         assertEquals(200, response.status.value)
-        assertEquals(321, responseObj.block?.id)
+        assertEquals("321", responseObj.block?.id)
     }
 
     @Test
@@ -95,7 +95,7 @@ class StubsTests {
         }
         val responseObj = response.body<BlockUpdateResponse>()
         assertEquals(200, response.status.value)
-        assertEquals(321, responseObj.block?.id)
+        assertEquals("321", responseObj.block?.id)
     }
 
     @Test
@@ -116,7 +116,7 @@ class StubsTests {
         }
         val responseObj = response.body<BlockDeleteResponse>()
         assertEquals(200, response.status.value)
-        assertEquals(321, responseObj.block?.id)
+        assertEquals("321", responseObj.block?.id)
     }
 
 }

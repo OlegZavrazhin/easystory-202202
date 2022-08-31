@@ -7,19 +7,19 @@ import ru.otus.otuskotlin.easystory.services.BlockService
 fun Route.v1Block(blockService: BlockService) {
     route("block") {
         post("create") {
-            call.createAd(blockService)
+            call.createBlock(blockService)
         }
         post("read") {
-            call.readAd(blockService)
+            call.readBlock(blockService)
         }
         post("update") {
-            call.updateAd(blockService)
+            call.updateBlock(blockService)
         }
         post("delete") {
-            call.deleteAd(blockService)
+            call.deleteBlock(blockService)
         }
         post("search") {
-            call.searchAd(blockService)
+            call.searchBlock(blockService)
         }
     }
 }

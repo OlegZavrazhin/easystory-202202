@@ -306,8 +306,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          example: 1
+          type: string
+          example: "1"
         uuid:
           type: string
           example: '346e02c6-d5c4-4f6b-94d9-5a718e42d0ca'

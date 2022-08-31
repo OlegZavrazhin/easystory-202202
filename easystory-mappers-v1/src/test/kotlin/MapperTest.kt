@@ -72,7 +72,7 @@ class MapperTest {
         val response = context.toTransportBlock() as BlockReadResponse
 
         assertEquals("1", response.requestId)
-        assertEquals(2, response.block?.id)
+        assertEquals("2", response.block?.id)
         assertEquals("346e02c6-d5c4-4f6b-94d9-5a718e42d0ca", response.block?.uuid)
         assertEquals("Story of mammals", response.block?.title)
         assertEquals("James Gunn", response.block?.author)
