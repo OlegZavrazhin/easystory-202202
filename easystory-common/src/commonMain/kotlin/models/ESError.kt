@@ -7,6 +7,7 @@ data class ESError(
     val group: String = "",
     val field: String = "",
     val message: String = "",
+    val level: ESErrorLevels = ESErrorLevels.ERROR,
     val exception: Throwable? = null
 )
 

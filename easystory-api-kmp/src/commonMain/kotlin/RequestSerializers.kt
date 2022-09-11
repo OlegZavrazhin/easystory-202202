@@ -1,4 +1,4 @@
-package ru.otus.otuskotlin.easystory.api.v1
+package ru.otus.otuskotlin.easystory.api.kmp.v1
 
 import ru.otus.otuskotlin.easystory.api.RequestSerializer
 import ru.otus.otuskotlin.easystory.api.v1.models.*

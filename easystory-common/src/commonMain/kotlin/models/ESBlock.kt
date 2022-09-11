@@ -1,7 +1,8 @@
 package ru.otus.otuskotlin.easystory.common.models
 
-import java.time.LocalDateTime
+import kotlinx.datetime.*
 
+val currentMoment = Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
 data class ESBlock(
     var id: ESBlockId = ESBlockId.NONE,
@@ -9,8 +10,9 @@ data class ESBlock(
     var title: String = "",
     var author: String = "",
     var content: String = "",
-    var creationDate: LocalDateTime = LocalDateTime.now(),
-    var updatedDate: LocalDateTime = LocalDateTime.now()
+    var creationDate: LocalDateTime = currentMoment,
+    var updatedDate: LocalDateTime = currentMoment,
+    var lock: ESBlockLock = ESBlockLock.NONE
 ) {
     fun deepCopy(): ESBlock = ESBlock(
         id = this@ESBlock.id,
@@ -19,7 +21,7 @@ data class ESBlock(
         author = this@ESBlock.author,
         content = this@ESBlock.content,
         creationDate = this@ESBlock.creationDate,
-        updatedDate = this@ESBlock.updatedDate
-
+        updatedDate = this@ESBlock.updatedDate,
+        lock = this@ESBlock.lock
     )
 }

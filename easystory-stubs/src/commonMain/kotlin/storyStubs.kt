@@ -1,7 +1,7 @@
 package easystory.stubs
 
 import ru.otus.otuskotlin.easystory.common.models.*
-import java.time.LocalDateTime
+import kotlinx.datetime.*
 
 object Story {
     private fun stub() = ESBlock(
@@ -10,8 +10,8 @@ object Story {
         title = "FairyTail",
         author = "Steven King",
         content = "<h2>Shining</h2><p>Once upon a time...</p>",
-        creationDate = LocalDateTime.now(),
-        updatedDate = LocalDateTime.now()
+        creationDate = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+        updatedDate = Clock.System.now().toLocalDateTime(TimeZone.UTC)
     )
 
     fun getBlock(block: (ESBlock.() -> Unit)? = null) = block?.let {
@@ -27,7 +27,7 @@ object Story {
         title = newBlock.title
         author = newBlock.author
         content = newBlock.content
-        creationDate = LocalDateTime.now()
-        updatedDate = LocalDateTime.now()
+        creationDate = Clock.System.now().toLocalDateTime(TimeZone.UTC)
+        updatedDate = Clock.System.now().toLocalDateTime(TimeZone.UTC)
     }
 }

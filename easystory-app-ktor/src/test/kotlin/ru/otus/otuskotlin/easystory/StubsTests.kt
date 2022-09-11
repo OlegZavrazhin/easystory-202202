@@ -28,25 +28,28 @@ class StubsTests {
     @Test
     fun create() = testApplication {
         val client = myClient()
+        val requestObj = BlockCreateRequest(
+            requestId = "0923840238",
+            block = BlockToAddOrUpdate(
+                title = "FairyTail",
+                author = "author",
+                content = "content"
+
+            ),
+            debug = BlockDebug(
+                mode = BlockRequestDebugMode.STUB,
+                stub = BlockRequestDebugStubs.SUCCESS
+            )
+        )
 
         val response = client.post("/block/create") {
-            val requestObj = BlockCreateRequest(
-                requestId = "0923840238",
-                block = BlockToAddOrUpdate(
-                    title = "FairyTail",
-                    author = "author",
-                    content = "content"
-
-                ),
-                debug = BlockDebug(
-                    mode = BlockRequestDebugMode.STUB,
-                    stub = BlockRequestDebugStubs.SUCCESS
-                )
-            )
             contentType(ContentType.Application.Json)
             setBody(requestObj)
         }
         val responseObj = response.body<BlockCreateResponse>()
+
+        println("requestObj $requestObj")
+
         assertEquals(200, response.status.value)
         assertEquals("created block stub", responseObj.block?.id)
     }

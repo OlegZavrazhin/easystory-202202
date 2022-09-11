@@ -4,10 +4,7 @@ import ru.otus.otuskotlin.easystory.common.EasyStoryContext
 import ru.otus.otuskotlin.easystory.common.models.*
 import ru.otus.otuskotlin.easystory.mappers.jackson.fromTransport
 import ru.otus.otuskotlin.easystory.mappers.jackson.toTransportBlock
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.*
 import kotlin.test.assertEquals
 
 
@@ -40,11 +37,8 @@ class MapperTest {
 
     @Test
     fun toTransport() {
-        val dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-        val dateFormatter = DateTimeFormatter.ofPattern(dateTimePattern)
-        val someDay = LocalDateTime.of(2021, 1, 30, 8, 30, 0)
-        val dateString = dateFormatter.format(ZonedDateTime.of(someDay, ZoneId.of("UTC-4")))
-        println("dateString ${dateString}")
+        val someDay = LocalDateTime(2021, 1, 30, 8, 30, 0)
+        println("someDay ${someDay}")
 
         val context = EasyStoryContext(
             requestId = ESRequestId("1"),
@@ -55,8 +49,8 @@ class MapperTest {
                 title = "Story of mammals",
                 author = "James Gunn",
                 content = "<h1>Story of mammals</h1><p>Once upon the time...</p>",
-                creationDate = LocalDateTime.of(2021, 1, 30, 8, 30, 0),
-                updatedDate = LocalDateTime.of(2021, 1, 30, 8, 30, 0)
+                creationDate = LocalDateTime(2021, 1, 30, 8, 30, 0),
+                updatedDate = LocalDateTime(2021, 1, 30, 8, 30, 0)
             ),
             errors = mutableListOf(
                 ESError(
@@ -77,8 +71,9 @@ class MapperTest {
         assertEquals("Story of mammals", response.block?.title)
         assertEquals("James Gunn", response.block?.author)
         assertEquals("<h1>Story of mammals</h1><p>Once upon the time...</p>", response.block?.content)
-        assertEquals("2021-01-30T08:30:00Z", response.block?.created)
-        assertEquals("2021-01-30T08:30:00Z", response.block?.updated)
+        // TODO: handle with zone
+        assertEquals("2021-01-30T08:30", response.block?.created)
+        assertEquals("2021-01-30T08:30", response.block?.updated)
         assertEquals("exception", response.errors?.firstOrNull()?.code)
         assertEquals("request", response.errors?.firstOrNull()?.group)
         assertEquals("id", response.errors?.firstOrNull()?.field)

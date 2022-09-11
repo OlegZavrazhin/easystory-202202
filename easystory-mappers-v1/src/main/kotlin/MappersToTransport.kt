@@ -4,8 +4,7 @@ import ru.otus.otuskotlin.easystory.api.v1.models.*
 import ru.otus.otuskotlin.easystory.common.EasyStoryContext
 import ru.otus.otuskotlin.easystory.common.models.*
 import ru.otus.otuskotlin.easystory.mappers.jackson.exceptions.UnknownESProcess
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.*
 
 fun EasyStoryContext.toTransportBlock(): IResponse = when (val proc = process) {
     ESProcess.CREATE -> toTransportCreate()
@@ -72,7 +71,7 @@ private fun ESBlock.toTransportReadBlock(): BlockReadResponseObject = BlockReadR
 )
 
 private fun LocalDateTime.toTransportDate(): String? = this
-    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"))
+    .toString()
     .takeIf { it.isNotEmpty() }
 
 private fun List<ESError>.toTransportErrors(): List<Error>? = this
