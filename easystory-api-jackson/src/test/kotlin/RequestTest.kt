@@ -1,4 +1,4 @@
-package ru.otus.otuskotlin.easystory.api.v1
+package ru.otus.otuskotlin.easystory.api.jackson.v1
 
 import org.junit.Test
 import ru.otus.otuskotlin.easystory.api.v1.models.*

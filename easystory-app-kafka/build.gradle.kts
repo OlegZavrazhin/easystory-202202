@@ -29,7 +29,7 @@ docker {
 dependencies {
     val kafkaVersion: String by project
     val coroutinesVersion: String by project
-    val kafkaTestContainerVersion: String by project
+    val testContainerVersion: String by project
     val logbackVersion: String by project
     val kotlinLoggingJvmVersion: String by project
     val atomicfuVersion: String by project
@@ -50,5 +50,5 @@ dependencies {
     implementation(project(":easystory-business-logic"))
 
     testImplementation(kotlin("test-junit"))
-    testImplementation("org.testcontainers:kafka:$kafkaTestContainerVersion")
+    testImplementation("org.testcontainers:kafka:$testContainerVersion")
 }

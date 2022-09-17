@@ -1,4 +1,4 @@
-package ru.otus.otuskotlin.easystory.api.v1
+package ru.otus.otuskotlin.easystory.api.kmp.v1
 
 import ru.otus.otuskotlin.easystory.api.v1.models.BlockCreateResponse
 import ru.otus.otuskotlin.easystory.api.v1.models.BlockResponseObject
@@ -17,7 +17,7 @@ class ResponseTest {
     @Test
     fun serializationRequestTest() {
         val jsonString = responseSerialize(blockCreateResponse)
-        assertContains(jsonString, """"id":"1"""")
+        assertContains(jsonString, "\"id\":\"1\"")
         assertContains(jsonString, """"uuid":"346e02c6-d5c4-4f6b-94d9-5a718e42d0ca"""")
     }
 

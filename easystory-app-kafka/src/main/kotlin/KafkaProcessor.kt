@@ -12,8 +12,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.errors.WakeupException
-import ru.otus.otuskotlin.easystory.api.v1.apiRequestDeserialize
-import ru.otus.otuskotlin.easystory.api.v1.apiResponseSerialize
+import ru.otus.otuskotlin.easystory.api.jackson.v1.apiRequestDeserialize
+import ru.otus.otuskotlin.easystory.api.jackson.v1.apiResponseSerialize
 import ru.otus.otuskotlin.easystory.api.v1.models.IRequest
 import ru.otus.otuskotlin.easystory.api.v1.models.IResponse
 import ru.otus.otuskotlin.easystory.common.EasyStoryContext

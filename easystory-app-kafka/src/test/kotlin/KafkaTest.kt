@@ -6,8 +6,8 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.rnorth.ducttape.unreliables.Unreliables
 import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.utility.DockerImageName
-import ru.otus.otuskotlin.easystory.api.v1.apiRequestSerialize
-import ru.otus.otuskotlin.easystory.api.v1.apiResponseDeserialize
+import ru.otus.otuskotlin.easystory.api.jackson.v1.apiRequestSerialize
+import ru.otus.otuskotlin.easystory.api.jackson.v1.apiResponseDeserialize
 import ru.otus.otuskotlin.easystory.api.v1.models.*
 import java.time.Duration
 import java.util.*
