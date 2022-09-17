@@ -81,6 +81,7 @@ class RepoBlockSQL(
         val oldLock = request.block.lock.takeIf { it != ESBlockLock.NONE }?.asString()
         val newBlock = request.block.copy(lock = newBlockLock)
 
+        // TODO: Mutex could be removed
         return mutex.withLock {
             safeTransaction({
                 val localBlock = BlockTable.select { BlockTable.id.eq(key) }.singleOrNull()?.let {
@@ -124,6 +125,7 @@ class RepoBlockSQL(
     override suspend fun deleteBlock(request: DBBlockIdRequest): DBBlockResponse {
         val key = request.id.takeIf { it != ESBlockId.NONE }?.asString() ?: return resultErrorEmptyId
 
+        // TODO: Mutex could be removed
         return mutex
             .withLock {
                 safeTransaction({
