@@ -40,6 +40,7 @@ class CorChain<T>(
     override suspend fun except(context: T, e: Throwable) = blockExcept(context, e)
 }
 
+@CORDsl
 fun <T> ICorChainDsl<T>.worker(function: CorWorkerDsl<T>.() -> Unit) {
 //    we apply here changes for some context which has been passed
     add(CorWorkerDsl<T>().apply(function))

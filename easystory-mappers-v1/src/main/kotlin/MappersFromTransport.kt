@@ -17,6 +17,7 @@ fun EasyStoryContext.fromTransport(request: IRequest) = when (request) {
 private fun IRequest?.requestId() = this?.requestId?.let { ESRequestId(it) } ?: ESRequestId.NONE
 private fun String?.toBlockId() = this?.let { ESBlockId(it) } ?: ESBlockId.NONE
 private fun BaseBlockIdRequestBlock?.toBlockWithId() = ESBlock(id = this?.id.toBlockId())
+private fun BaseBlockIdRequestWithLockBlock?.toBlockWithId() = ESBlock(id = this?.id.toBlockId())
 
 private fun BlockToAddOrUpdate.toInternal(): ESBlock = ESBlock(
     title = this.title ?: "",

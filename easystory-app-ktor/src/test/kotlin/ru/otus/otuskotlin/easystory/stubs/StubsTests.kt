@@ -1,33 +1,23 @@
-package ru.otus.otuskotlin.easystory
+package ru.otus.otuskotlin.easystory.stubs
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.SerializationFeature
-import io.ktor.client.call.*
-import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
 import org.junit.Test
+import ru.otus.otuskotlin.easystory.api.jackson.v1.apiRequestSerialize
+import ru.otus.otuskotlin.easystory.api.jackson.v1.apiResponseDeserialize
 import ru.otus.otuskotlin.easystory.api.v1.models.*
+import ru.otus.otuskotlin.easystory.config.AuthConfig
+import ru.otus.otuskotlin.easystory.helpers.addAuth
+import ru.otus.otuskotlin.easystory.module
 import kotlin.test.assertEquals
 
 class StubsTests {
 
-    private fun ApplicationTestBuilder.myClient() = createClient {
-        install(ContentNegotiation) {
-            jackson {
-                disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-
-                enable(SerializationFeature.INDENT_OUTPUT)
-                writerWithDefaultPrettyPrinter()
-            }
-        }
-    }
-
     @Test
     fun create() = testApplication {
-        val client = myClient()
+        application { module(authConfig = AuthConfig.TEST) }
         val requestObj = BlockCreateRequest(
             requestId = "0923840238",
             block = BlockToAddOrUpdate(
@@ -44,11 +34,10 @@ class StubsTests {
 
         val response = client.post("/block/create") {
             contentType(ContentType.Application.Json)
-            setBody(requestObj)
+            addAuth()
+            setBody(apiRequestSerialize(requestObj))
         }
-        val responseObj = response.body<BlockCreateResponse>()
-
-        println("requestObj $requestObj")
+        val responseObj = apiResponseDeserialize<BlockCreateResponse>(response.bodyAsText())
 
         assertEquals(200, response.status.value)
         assertEquals("created block stub", responseObj.block?.id)
@@ -56,7 +45,7 @@ class StubsTests {
 
     @Test
     fun read() = testApplication {
-        val client = myClient()
+        application { module(authConfig = AuthConfig.TEST) }
 
         val response = client.post("/block/read") {
             val requestObj = BlockReadRequest(
@@ -68,16 +57,17 @@ class StubsTests {
                 )
             )
             contentType(ContentType.Application.Json)
-            setBody(requestObj)
+            addAuth()
+            setBody(apiRequestSerialize(requestObj))
         }
-        val responseObj = response.body<BlockReadResponse>()
+        val responseObj = apiResponseDeserialize<BlockReadResponse>(response.bodyAsText())
         assertEquals(200, response.status.value)
         assertEquals("321", responseObj.block?.id)
     }
 
     @Test
     fun update() = testApplication {
-        val client = myClient()
+        application { module(authConfig = AuthConfig.TEST) }
 
         val response = client.post("/block/update") {
             val requestObj = BlockUpdateRequest(
@@ -94,30 +84,32 @@ class StubsTests {
                 )
             )
             contentType(ContentType.Application.Json)
-            setBody(requestObj)
+            addAuth()
+            setBody(apiRequestSerialize(requestObj))
         }
-        val responseObj = response.body<BlockUpdateResponse>()
+        val responseObj = apiResponseDeserialize<BlockUpdateResponse>(response.bodyAsText())
         assertEquals(200, response.status.value)
         assertEquals("321", responseObj.block?.id)
     }
 
     @Test
     fun delete() = testApplication {
-        val client = myClient()
+        application { module(authConfig = AuthConfig.TEST) }
 
         val response = client.post("/block/delete") {
             val requestObj = BlockDeleteRequest(
                 requestId = "12345",
-                block = BaseBlockIdRequestBlock("321"),
+                block = BaseBlockIdRequestWithLockBlock("321"),
                 debug = BlockDebug(
                     mode = BlockRequestDebugMode.STUB,
                     stub = BlockRequestDebugStubs.SUCCESS
                 )
             )
             contentType(ContentType.Application.Json)
-            setBody(requestObj)
+            addAuth()
+            setBody(apiRequestSerialize(requestObj))
         }
-        val responseObj = response.body<BlockDeleteResponse>()
+        val responseObj = apiResponseDeserialize<BlockDeleteResponse>(response.bodyAsText())
         assertEquals(200, response.status.value)
         assertEquals("321", responseObj.block?.id)
     }

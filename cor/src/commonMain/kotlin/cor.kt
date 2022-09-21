@@ -20,5 +20,5 @@ interface ICorHandlerDsl<T> {
 interface ICorChainDsl<T> : ICorExecDsl<T>, ICorHandlerDsl<T> {
     fun add(worker: ICorExecDsl<T>)
 }
-
+@CORDsl
 fun <T> rootChain(function: CorChainDsl<T>.() -> Unit) = CorChainDsl<T>().apply(function)

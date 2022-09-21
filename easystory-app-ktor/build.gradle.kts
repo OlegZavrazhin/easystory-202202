@@ -34,6 +34,8 @@ docker {
 
 dependencies {
     val logbackVersion: String by project
+    val kotlinVersion: String by project
+
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation(ktor("core"))
     implementation(ktor("netty"))
@@ -46,6 +48,8 @@ dependencies {
     implementation(ktor("cors"))
     implementation(ktor("auto-head-response"))
     implementation(ktor("websockets"))
+    implementation(ktor("auth"))
+    implementation(ktor("auth-jwt"))
 
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
@@ -54,9 +58,13 @@ dependencies {
     implementation(project(":easystory-mappers-v1"))
     implementation(project(":easystory-services"))
     implementation(project(":easystory-stubs"))
+    implementation(project(":easystory-repository-inmemory"))
+    implementation(project(":easystory-repository-postgresql"))
 
     testImplementation(kotlin("test-junit"))
     testImplementation(ktor("test-host"))
     testImplementation(ktor("content-negotiation", prefix = "client-"))
-
+    testImplementation(ktor("websockets", prefix = "client-"))
+    testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
 }

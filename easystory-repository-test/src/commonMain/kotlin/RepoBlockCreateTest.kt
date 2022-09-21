@@ -24,6 +24,7 @@ abstract class RepoBlockCreateTest {
     @Test
     fun createSuccess() {
         val result = runBlocking { repo.createBlock(DBBlockRequest(createObj)) }
+        println("createSuccess() result: ${result}")
         val expected = createObj.copy(id = result.result?.id ?: ESBlockId.NONE)
         assertEquals(true, result.isSuccess)
         assertEquals(expected.title, result.result?.title)

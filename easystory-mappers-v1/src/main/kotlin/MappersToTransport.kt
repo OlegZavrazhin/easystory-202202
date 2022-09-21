@@ -52,7 +52,8 @@ fun EasyStoryContext.toTransportSearch() = BlockSearchResponse(
 
 private fun ESBlock.toTransportBlock(): BlockResponseObject = BlockResponseObject(
     id = id.takeIf { it != ESBlockId.NONE }?.asStringOrNull(),
-    uuid = uuid.takeIf { it.isNotBlank() }
+    uuid = uuid.takeIf { it.isNotBlank() },
+    lock = lock.takeIf { it != ESBlockLock.NONE }?.asString()
 )
 
 private fun List<ESBlock>.toTransportBlock(): List<BlockResponseObject>? = this
@@ -67,7 +68,8 @@ private fun ESBlock.toTransportReadBlock(): BlockReadResponseObject = BlockReadR
     author = author.takeIf { it.isNotBlank() },
     created = creationDate.toTransportDate(),
     updated = updatedDate.toTransportDate(),
-    content = content.takeIf { it.isNotBlank() }
+    content = content.takeIf { it.isNotBlank() },
+    lock = lock.takeIf { it != ESBlockLock.NONE }?.asString()
 )
 
 private fun LocalDateTime.toTransportDate(): String? = this

@@ -23,7 +23,7 @@ data class BlockEntity(
         content = model.content.takeIf { it.isNotBlank() },
         creationDate = model.creationDate,
         updatedDate = model.updatedDate,
-        lock = model.lock.asString().takeIf { it.isNotBlank() }
+        lock = model.lock.takeIf { it != ESBlockLock.NONE }?.asString()
     )
 
     fun toInternal() = ESBlock(

@@ -49,6 +49,7 @@ class BlockRepoInMemory(
         mutex.withLock {
             cache.put(key, entity)
         }
+        println("createBlock block ${block}")
         return DBBlockResponse(
             result = block,
             isSuccess = true

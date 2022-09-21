@@ -1,12 +1,14 @@
 package ru.otus.otuskotlin.easystory.cor
 
 // CHAIN LOGIC START
+@CORDsl
 fun <T> ICorChainDsl<T>.chain(function: CorChainDsl<T>.() -> Unit) {
     add(
         CorChainDsl<T>().apply(function)
     )
 }
 
+@CORDsl
 class CorChainDsl<T>(
     override var title: String = "",
     private val workers: MutableList<ICorExecDsl<T>> = mutableListOf(),
