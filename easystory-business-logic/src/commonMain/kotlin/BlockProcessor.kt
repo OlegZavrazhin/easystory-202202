@@ -1,47 +1,33 @@
 package ru.otus.otuskotlin.easystory.business.logic
 
-import easystory.stubs.Story
+import ru.otus.otuskotlin.easystory.business.logic.general.initRepo
+import ru.otus.otuskotlin.easystory.business.logic.general.initStatus
+import ru.otus.otuskotlin.easystory.business.logic.general.operation
+import ru.otus.otuskotlin.easystory.business.logic.general.prepareResult
+import ru.otus.otuskotlin.easystory.business.logic.repo.*
+import ru.otus.otuskotlin.easystory.business.logic.stubs.*
 import ru.otus.otuskotlin.easystory.common.EasyStoryContext
 import ru.otus.otuskotlin.easystory.common.models.*
 import ru.otus.otuskotlin.easystory.cor.chain
 import ru.otus.otuskotlin.easystory.cor.rootChain
 import ru.otus.otuskotlin.easystory.cor.worker
 
-class BlockProcessor {
-    suspend fun exec(context: EasyStoryContext) = BusinessChain.exec(context)
+class BlockProcessor(private val settings: ESSettings = ESSettings()) {
+    suspend fun exec(context: EasyStoryContext) =
+        BusinessChain.exec(context.apply { settings = this@BlockProcessor.settings })
 
     companion object {
         private val BusinessChain = rootChain<EasyStoryContext> {
-            worker {
-                title = "Start processing"
-                on { state == CORState.NONE }
-                handle { state = CORState.RUNNING }
-            }
+
+            initStatus("Start processing")
+            initRepo("Init repository")
 
 //            CREATION CHAIN START
-            chain {
-                title = "create block"
-                on { process == ESProcess.CREATE && state == CORState.RUNNING }
+            operation("create block", ESProcess.CREATE) {
 
-                chain {
-                    title = "Stubs create"
-                    on { workMode == ESWorkMode.STUB && state == CORState.RUNNING }
-
-                    worker {
-                        title = "Success block creation stub"
-                        on { stubCase == ESStubs.SUCCESS && state == CORState.RUNNING }
-                        handle {
-                            state = CORState.FINISHING
-
-                            blockResponse = Story.getBlock {
-                                id = ESBlockId("created block stub")
-                            }
-
-                        }
-                    }
-
-                    stubBadTitle("Title error during create")
-
+                stubs("Stubs create") {
+                    stubCreateSuccess("Success block creation stub")
+                    stubBadTitle("Title error during create stub")
                     noSuchStub()
                 }
 
@@ -49,25 +35,24 @@ class BlockProcessor {
                     title = "Validate request during create"
 
                     copyToValidationField()
-
                     checkEmptyTitle()
-
                     checkEmptyContent()
-
                     completeValidation()
-
                 }
+
+                chain {
+                    title = "Saving to DB"
+
+                    repoPrepareCreate("Preparing block  to save")
+                    repoCreate("Inserting into DB")
+                }
+                prepareResult("create prepare result")
+
             }
 //            CREATION CHAIN END
 //            READ BLOCK START
-            chain {
-                title = "read block"
-                on { process == ESProcess.READ && state == CORState.RUNNING }
-
-                chain {
-                    title = "read stubs"
-                    on { workMode == ESWorkMode.STUB && state == CORState.RUNNING }
-
+            operation("read block", ESProcess.READ) {
+                stubs("read stubs") {
                     stubSuccess("read success stub")
 
                     stubBadId("read bad id stub")
@@ -86,17 +71,22 @@ class BlockProcessor {
 
                 }
 
+                chain {
+                    title = "Get from DB"
+                    repoRead("Read from DB")
+                    worker {
+                        title = "Preparing response for read"
+                        on { state == CORState.RUNNING }
+                        handle { blockRepoDone = blockRepoRead }
+                    }
+                }
+
+                prepareResult("prepare result")
             }
 //            READ BLOCK END
 //            UPDATE BLOCK START
-            chain {
-                title = "update block"
-                on { process == ESProcess.UPDATE && state == CORState.RUNNING }
-
-                chain {
-                    title = "Stubs update"
-                    on { workMode  == ESWorkMode.STUB && state == CORState.RUNNING }
-
+            operation("update block", ESProcess.UPDATE) {
+                stubs("Stubs update") {
                     stubSuccess("Success block stub during update")
                     stubBadId("bad id stub during update")
                     stubBadTitle("Title error during update")
@@ -105,7 +95,7 @@ class BlockProcessor {
                 }
 
                 chain {
-                    title = "Validate request during read"
+                    title = "Validate request during update"
 
                     copyToValidationField()
 
@@ -117,17 +107,18 @@ class BlockProcessor {
 
                 }
 
-            }
-
-//            DELETE CHAIN START
-            chain {
-                title = "delete block"
-                on { process == ESProcess.DELETE && state == CORState.RUNNING }
-
                 chain {
-                    title = "Stubs delete"
-                    on { workMode == ESWorkMode.STUB && state == CORState.RUNNING }
-
+                    title = "Update in DB"
+                    repoRead("Read from DB during update")
+                    repoCheckReadLock("Check lock")
+                    repoPrepareUpdate("Prepare update")
+                    repoUpdate("Update repo with block")
+                }
+                prepareResult("prepare result")
+            }
+//            DELETE CHAIN START
+            operation("delete block", ESProcess.DELETE) {
+                stubs("Stubs delete") {
                     stubSuccess("Success block stub during delete")
                     stubBadId("bad id stub during delete")
 
@@ -143,36 +134,31 @@ class BlockProcessor {
 
                     completeValidation()
                 }
+
+                chain {
+                    title = "Delete in DB"
+                    repoRead("Read from DB during delete")
+                    repoCheckReadLock("Check lock")
+                    repoPrepareDelete("Prepare delete")
+                    repoDelete("Delete in DB")
+                }
+                prepareResult("prepare result")
+
             }
 //            DELETE CHAIN END
 //            SEARCH CHAIN START
-            chain {
-                title = "search blocks"
-                on { process == ESProcess.SEARCH && state == CORState.RUNNING }
-
-                chain {
-                    title = "Stubs search"
-                    on { workMode  == ESWorkMode.STUB && state == CORState.RUNNING }
-
-                    worker {
-                        title = "Success block stub during search"
-                        on { stubCase == ESStubs.SUCCESS && state == CORState.RUNNING }
-
-                        handle {
-                            state = CORState.FINISHING
-
-                            blocksResponse = Story.getBlocks()
-                        }
-
-                    }
-
+            operation("search blocks", ESProcess.SEARCH) {
+                stubs("Stubs search") {
+                    stubSearchSuccess("stub search success")
                     noSuchStub()
-
                 }
 
                 chain {
                     completeValidation()
                 }
+
+                repoSearch("Search in DB")
+                prepareResult("prepare result")
             }
 //            SEARCH CHAIN END
         }.build()

@@ -48,6 +48,8 @@ dependencies {
     implementation(project(":easystory-services"))
     implementation(project(":easystory-stubs"))
     implementation(project(":easystory-business-logic"))
+    implementation(project(":easystory-repository-inmemory"))
+    implementation(project(":easystory-repository-postgresql"))
 
     testImplementation(kotlin("test-junit"))
     testImplementation("org.testcontainers:kafka:$testContainerVersion")

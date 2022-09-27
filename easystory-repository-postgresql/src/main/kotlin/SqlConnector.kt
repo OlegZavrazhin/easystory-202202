@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class SqlConnector(
     // it's ok for local env
-    private val url: String = "jdbc:postgresql://localhost:5432/esdb",
+    private val url: String = "jdbc:postgresql://localhost:6432/esdb",
     private val user: String = "es",
     private val password: String = "es-pass",
     private val schema: String = "es",
@@ -80,9 +80,10 @@ class SqlConnector(
                 SchemaUtils.create(*tables, inBatch = true)
             } else if (System.getenv("es.sql_fast_migration").toBoolean()) {
                 // TODO: Place to exec migration: create and ensure tables
-            } else {
+            } /*else {
+                //TODO: somehow here breakpoint  with exposedVersion=0.39.2 and cause  of this block repo does not work
                 SchemaUtils.createMissingTablesAndColumns(*tables, inBatch = true)
-            }
+            }*/
         }
 
         return connect

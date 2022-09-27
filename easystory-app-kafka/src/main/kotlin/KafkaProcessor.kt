@@ -23,12 +23,13 @@ import ru.otus.otuskotlin.easystory.services.BlockService
 import java.time.Duration
 import java.util.*
 import kotlinx.atomicfu.atomic
+import ru.otus.otuskotlin.easystory.common.models.ESSettings
 
 private val log = KotlinLogging.logger {}
 
 class KafkaProcessor(
     val config: KafkaConfig,
-    private val service: BlockService = BlockService(),
+    private val service: BlockService = BlockService(ESSettings()),
     private val consumer: Consumer<String, String> = config.createConsumer(),
     private val producer: Producer<String, String> = config.createProducer()
 ) {

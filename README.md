@@ -55,8 +55,17 @@
 4. CreationDate
 5. UpdatedDate
 
-## Транспортные модели, API
+## Структура проекта
 1. [specs](specs) - yaml OpenApi
 2. [easystory-api-jackson](easystory-api-jackson) - генерация моделей и их сериализация и десериализация с помощью jackson
 3. [easystory-api-kmp](easystory-api-kmp) - генерация моделей и их сериализация и десериализация на базе мультиплатформенного приложения
-3. [easystory-mappers-v1](easystory-mappers-v1) - мапперы из транспортных моделей во внутренние и обратно
+4. [easystory-mappers-v1](easystory-mappers-v1) - мапперы из транспортных моделей во внутренние и обратно
+5. [easystory-common](easystory-common) - внутренние модели, общие классы, глобальный контекст
+6. [easystory-stubs](easystory-stubs) - стабы для тестирования
+7. [easystory-services](easystory-services) - модуль сервиса
+8. [easystory-app-ktor](easystory-app-ktor) - приложение Ktor
+9. [easystory-business-logic](easystory-business-logic) - бизнес логика с COR
+10. [cor](cor) - chain of responsibility
+11. [easystory-app-kafka](easystory-app-kafka) - kafka модуль
+12. [easystory-repository-inmemory](easystory-repository-inmemory) - репозиторий для тестирования в оперативной памяти, дефолтное время хранения данных 10 минут
+13. [easystory-repository-postgresql](easystory-repository-postgresql) - репозиторий с сохранением в postgresql

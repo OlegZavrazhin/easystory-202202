@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+
+  sql:
+    image: postgres
+    ports:
+      - "6432:5432"
+    environment:
+#      - POSTGRESQL_POSTGRES_PASSWORD=pass
+#      - POSTGRESQL_PASSWORD=pass
+#      - POSTGRESQL_USERNAME=es
+#      - POSTGRESQL_DATABASE=es
+      POSTGRES_USER: "es"
+      POSTGRES_PASSWORD: "es-pass"
+      POSTGRES_DB: "esdb"
+

@@ -17,6 +17,8 @@ fun EasyStoryContext.fromTransport(request: IRequest) = when (request) {
 private fun IRequest?.requestId() = this?.requestId?.let { ESRequestId(it) } ?: ESRequestId.NONE
 private fun String?.toBlockId() = this?.let { ESBlockId(it) } ?: ESBlockId.NONE
 private fun BaseBlockIdRequestBlock?.toBlockWithId() = ESBlock(id = this?.id.toBlockId())
+private fun BaseBlockIdRequestWithLockBlock?.toBlockWithId() = ESBlock(id = this?.id.toBlockId())
+private fun BaseBlockIdRequestWithLockBlock?.toBlockWithIdAndLock() = ESBlock(id = this?.id.toBlockId(), lock = ESBlockLock(this?.lock ?: ""))
 
 private fun BlockToAddOrUpdate.toInternal(): ESBlock = ESBlock(
     title = this.title ?: "",
@@ -28,7 +30,8 @@ private fun BlockToUpdate.toInternal(): ESBlock = ESBlock(
     id = this.id.toBlockId(),
     title = this.title ?: "",
     author = this.author ?: "",
-    content = this.content ?: ""
+    content = this.content ?: "",
+    lock = ESBlockLock(this.lock ?: "")
 )
 
 private fun BlockFilter?.toInternal(): ESBlockFilter = ESBlockFilter(
@@ -80,7 +83,7 @@ fun EasyStoryContext.fromTransport(request: BlockUpdateRequest) {
 fun EasyStoryContext.fromTransport(request: BlockDeleteRequest) {
     process = ESProcess.DELETE
     requestId = request.requestId()
-    blockRequest = request.block.toBlockWithId()
+    blockRequest = request.block.toBlockWithIdAndLock()
     workMode = request.debug.transportToWorkMode()
     stubCase = request.debug.transportToStubCase()
 }

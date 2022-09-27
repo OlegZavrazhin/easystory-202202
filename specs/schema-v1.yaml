@@ -91,14 +91,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#components/schemas/BlockUpdateRequest'
+              $ref: '#components/schemas/BlockUpdateRequest' #FIXME: weird BlockDeleteRequest with lock?
       responses:
         200:
           description: Response after deletion
           content:
             application/json:
               schema:
-                $ref: '#components/schemas/BlockUpdateResponse'
+                $ref: '#components/schemas/BlockUpdateResponse' #FIXME: weird BlockDeleteResponse with lock?
 
   /blocks/search:
     post:
@@ -187,14 +187,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Error'
-
       discriminator:
         propertyName: responseType
         mapping:
-          create: '#/components/schemas/BlockCreateResponse'
-          read: '#/components/schemas/BlockReadResponse'
-          update: '#/components/schemas/BlockUpdateResponse'
-          delete: '#/components/schemas/BlockDeleteResponse'
+#          create: '#/components/schemas/BlockCreateResponse'
+#          read: '#/components/schemas/BlockReadResponse'
+#          update: '#/components/schemas/BlockUpdateResponse'
+#          delete: '#/components/schemas/BlockDeleteResponse'
           search: '#/components/schemas/BlockSearchResponse'
 
 
@@ -222,6 +221,25 @@ components:
             id:
               type: string
 
+    BaseBlockIdRequestWithLock:
+      type: object
+      properties:
+        block:
+          type: object
+          properties:
+            id:
+              type: string
+            lock:
+              type: string
+              description: Оптимистичная блокировка
+
+    Lock:
+      type: object
+      properties:
+        lock:
+          type: string
+          description: Оптимистичная блокировка
+
     BlockUpdateRequest:
       allOf:
         - $ref: '#/components/schemas/IRequest'
@@ -235,7 +253,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/IRequest'
         - $ref: '#/components/schemas/BlockRequestDebug'
-        - $ref: '#/components/schemas/BaseBlockIdRequest'
+        - $ref: '#/components/schemas/BaseBlockIdRequestWithLock'
 
     BlockSearchRequest:
       allOf:
@@ -243,8 +261,8 @@ components:
         - $ref: '#/components/schemas/BlockRequestDebug'
         - type: object
           properties:
-             filter:
-               $ref: '#/components/schemas/BlockFilter'
+            filter:
+              $ref: '#/components/schemas/BlockFilter'
 
     BlockFilter:
       type: object
@@ -300,17 +318,20 @@ components:
             blocks:
               type: array
               items:
-                $ref: '#/components/schemas/BlockResponseObject'
+                $ref: '#/components/schemas/BlockReadResponseObject'
+#                $ref: '#/components/schemas/BlockResponseObject'
 
     BlockResponseObject:
-      type: object
-      properties:
-        id:
-          type: string
-          example: "1"
-        uuid:
-          type: string
-          example: '346e02c6-d5c4-4f6b-94d9-5a718e42d0ca'
+      allOf:
+        - $ref: '#/components/schemas/Lock'
+        - type: object
+          properties:
+            id:
+              type: string
+              example: "1"
+            uuid:
+              type: string
+              example: '346e02c6-d5c4-4f6b-94d9-5a718e42d0ca'
 
     BlockReadResponseObject:
       type: object
@@ -321,6 +342,7 @@ components:
     BlockToUpdate:
       allOf:
         - $ref: '#/components/BlockToAddOrUpdate'
+        - $ref: '#/components/Lock'
         - type: object
           properties:
             id:

@@ -4,12 +4,14 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 // PARALLEL LOGIC START
+@CORDsl
 fun <T> CorChainDsl<T>.parallel(function: CorParallelDsl<T>.() -> Unit) {
     add(
         CorParallelDsl<T>().apply(function)
     )
 }
 
+@CORDsl
 class CorParallelDsl<T>(
     override var title: String = "",
     private val workers: MutableList<ICorExecDsl<T>> = mutableListOf(),
