@@ -79,6 +79,7 @@ fun Application.module(
     val corSettings by lazy {
         settings ?: ESSettings(
             repoTest = BlockRepoInMemory(),
+            // FIXME: move to settings
             repoProd = RepoBlockSQL(url = "jdbc:postgresql://localhost:6432/esdb")
         )
     }

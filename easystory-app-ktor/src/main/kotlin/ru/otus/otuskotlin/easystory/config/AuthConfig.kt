@@ -8,6 +8,7 @@ data class AuthConfig(
     val audience: String,
     val realm: String,
 ) {
+    // FIXME: exclude to a separate extension
     constructor(environment: ApplicationEngineEnvironment): this(
         secret = environment.config.property("jwt.secret").getString(),
         issuer = environment.config.property("jwt.issuer").getString(),

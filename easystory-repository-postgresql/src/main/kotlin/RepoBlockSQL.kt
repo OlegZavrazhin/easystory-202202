@@ -37,7 +37,6 @@ class RepoBlockSQL(
     private fun save(item: ESBlock): DBBlockResponse {
         return safeTransaction({
             val response = BlockTable.insert {
-                println("DBBlockResponse save ${it}")
                 if (item.id != ESBlockId.NONE)
                     it[id] = item.id.asString()
                 else
@@ -170,6 +169,7 @@ class RepoBlockSQL(
         return try {
             transaction(db, statement)
         } catch (e: SQLException) {
+            e.printStackTrace()
             throw e
         } catch (e: Throwable) {
             return handleException(e)

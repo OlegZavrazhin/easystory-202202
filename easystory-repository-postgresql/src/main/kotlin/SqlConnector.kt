@@ -80,9 +80,10 @@ class SqlConnector(
                 SchemaUtils.create(*tables, inBatch = true)
             } else if (System.getenv("es.sql_fast_migration").toBoolean()) {
                 // TODO: Place to exec migration: create and ensure tables
-            } else {
+            } /*else {
+                //TODO: somehow here breakpoint  with exposedVersion=0.39.2 and cause  of this block repo does not work
                 SchemaUtils.createMissingTablesAndColumns(*tables, inBatch = true)
-            }
+            }*/
         }
 
         return connect
