@@ -187,14 +187,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Error'
-
       discriminator:
         propertyName: responseType
         mapping:
-          create: '#/components/schemas/BlockCreateResponse'
-          read: '#/components/schemas/BlockReadResponse'
-          update: '#/components/schemas/BlockUpdateResponse'
-          delete: '#/components/schemas/BlockDeleteResponse'
+#          create: '#/components/schemas/BlockCreateResponse'
+#          read: '#/components/schemas/BlockReadResponse'
+#          update: '#/components/schemas/BlockUpdateResponse'
+#          delete: '#/components/schemas/BlockDeleteResponse'
           search: '#/components/schemas/BlockSearchResponse'
 
 
@@ -319,7 +318,8 @@ components:
             blocks:
               type: array
               items:
-                $ref: '#/components/schemas/BlockResponseObject'
+                $ref: '#/components/schemas/BlockReadResponseObject'
+#                $ref: '#/components/schemas/BlockResponseObject'
 
     BlockResponseObject:
       allOf:
@@ -342,6 +342,7 @@ components:
     BlockToUpdate:
       allOf:
         - $ref: '#/components/BlockToAddOrUpdate'
+        - $ref: '#/components/Lock'
         - type: object
           properties:
             id:

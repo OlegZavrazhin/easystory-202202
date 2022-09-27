@@ -7,45 +7,45 @@ import ru.otus.otuskotlin.easystory.mappers.jackson.exceptions.UnknownESProcess
 import kotlinx.datetime.*
 
 fun EasyStoryContext.toTransportBlock(): IResponse = when (val proc = process) {
-    ESProcess.CREATE -> toTransportCreate()
-    ESProcess.READ -> toTransportRead()
-    ESProcess.UPDATE -> toTransportUpdate()
-    ESProcess.DELETE -> toTransportDelete()
-    ESProcess.SEARCH -> toTransportSearch()
+    ESProcess.CREATE -> toTransportCreate().copy(responseType = "create")
+    ESProcess.READ -> toTransportRead().copy(responseType = "read")
+    ESProcess.UPDATE -> toTransportUpdate().copy(responseType = "update")
+    ESProcess.DELETE -> toTransportDelete().copy(responseType = "delete")
+    ESProcess.SEARCH -> toTransportSearch().copy(responseType = "search")
     ESProcess.NONE -> throw UnknownESProcess(proc)
 }
 
 fun EasyStoryContext.toTransportCreate() = BlockCreateResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == CORState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toBlockApiResponseResult(),
     errors = errors.toTransportErrors(),
     block = blockResponse.toTransportBlock()
 )
 
 fun EasyStoryContext.toTransportRead() = BlockReadResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == CORState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toBlockApiResponseResult(),
     errors = errors.toTransportErrors(),
     block = blockResponse.toTransportReadBlock()
 )
 
 fun EasyStoryContext.toTransportUpdate() = BlockUpdateResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == CORState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toBlockApiResponseResult(),
     errors = errors.toTransportErrors(),
     block = blockResponse.toTransportBlock()
 )
 
 fun EasyStoryContext.toTransportDelete() = BlockDeleteResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == CORState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toBlockApiResponseResult(),
     errors = errors.toTransportErrors(),
     block = blockResponse.toTransportBlock()
 )
 
 fun EasyStoryContext.toTransportSearch() = BlockSearchResponse(
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == CORState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+    result = state.toBlockApiResponseResult(),
     errors = errors.toTransportErrors(),
     blocks = blocksResponse.toTransportBlock()
 )
@@ -56,8 +56,8 @@ private fun ESBlock.toTransportBlock(): BlockResponseObject = BlockResponseObjec
     lock = lock.takeIf { it != ESBlockLock.NONE }?.asString()
 )
 
-private fun List<ESBlock>.toTransportBlock(): List<BlockResponseObject>? = this
-    .map { it.toTransportBlock() }
+private fun List<ESBlock>.toTransportBlock(): List<BlockReadResponseObject>? = this
+    .map { it.toTransportReadBlock() }
     .toList()
     .takeIf { it.isNotEmpty() }
 
@@ -87,3 +87,9 @@ private fun ESError.toTransportBlock() = Error(
     field = field.takeIf { it.isNotBlank() },
     message = message.takeIf { it.isNotBlank() },
 )
+
+private fun CORState.toBlockApiResponseResult(): ResponseResult = when(this) {
+    CORState.RUNNING -> ResponseResult.SUCCESS
+    CORState.FINISHING -> ResponseResult.SUCCESS
+    else -> ResponseResult.ERROR
+}

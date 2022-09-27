@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class SqlConnector(
     // it's ok for local env
-    private val url: String = "jdbc:postgresql://localhost:5432/esdb",
+    private val url: String = "jdbc:postgresql://localhost:6432/esdb",
     private val user: String = "es",
     private val password: String = "es-pass",
     private val schema: String = "es",

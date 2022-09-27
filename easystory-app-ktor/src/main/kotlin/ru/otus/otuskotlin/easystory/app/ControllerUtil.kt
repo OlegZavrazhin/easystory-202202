@@ -16,6 +16,7 @@ import ru.otus.otuskotlin.easystory.common.models.ESProcess
 import ru.otus.otuskotlin.easystory.common.models.asInternalError
 import ru.otus.otuskotlin.easystory.mappers.jackson.fromTransport
 import ru.otus.otuskotlin.easystory.mappers.jackson.toTransportBlock
+import ru.otus.otuskotlin.easystory.api.kmp.v1.responseSerialize
 
 suspend inline fun <reified Q : IRequest, reified R : IResponse> ApplicationCall.controllerUtil(
     process: ESProcess,
@@ -32,6 +33,7 @@ suspend inline fun <reified Q : IRequest, reified R : IResponse> ApplicationCall
         context.fromTransport(apiRequestDeserialize<Q>(request))
         context.block()
         val response = context.toTransportBlock()
+//        respondText(responseSerialize(response), ContentType.Application.Json)
         respondText(apiResponseSerialize(response), ContentType.Application.Json)
     } catch (e: Throwable) {
         process.also { context.process = it }

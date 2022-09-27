@@ -11,7 +11,10 @@ fun ICorChainDsl<EasyStoryContext>.completeValidation() = worker {
     on { state == CORState.RUNNING }
     handle {
         blockValidated = blockCopyForValidation.deepCopy()
+        println("debug blockCopyForValidation ${blockCopyForValidation}")
+        println("debug blockValidated ${blockValidated}")
     }
+    println("debug")
 }
 
 fun ICorChainDsl<EasyStoryContext>.noSuchStub() = worker {

@@ -16,7 +16,7 @@ import ru.otus.otuskotlin.easystory.repository.inmemory.models.BlockEntity
 
 class BlockRepoInMemory(
     initObjects: List<ESBlock> = emptyList(),
-    ttl: Duration = 2.minutes,
+    ttl: Duration = 10.minutes,
     val randomUUID: () -> String = { uuid4().toString() }
 ) : IBlockRepository {
     private val cache = Cache.Builder()
@@ -103,15 +103,21 @@ class BlockRepoInMemory(
     }
 
     override suspend fun searchBlock(request: DBBlockFilterRequest): DBBlocksResponse {
-        val result = cache.asMap().asSequence()
+        val localCacheSeq = cache.asMap().asSequence()
+        val result = localCacheSeq
             .filter { entry ->
                 request.filter.searchString.takeIf { it.isNotBlank() }?.let {
-                    entry.value.title?.contains(it) ?: false
-                            || entry.value.author?.contains(it) ?: false
-                            || entry.value.content?.contains(it) ?: false
+                    println("entry.value.title ${entry.value.title}")
+                    println("entry.value.title?.contains(it) ${entry.value.title?.contains(it)}")
+                    entry.value.title?.contains(it)
+                        ?: entry.value.author?.contains(it)
+                        ?: entry.value.content?.contains(it)
+                        ?: false
                 } ?: true
             }
-            .map { it.value.toInternal() }
+            .map {
+                return@map it.value.toInternal()
+            }
             .toList()
 
         return DBBlocksResponse(

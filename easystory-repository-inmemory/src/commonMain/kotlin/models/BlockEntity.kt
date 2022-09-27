@@ -26,7 +26,7 @@ data class BlockEntity(
         lock = model.lock.takeIf { it != ESBlockLock.NONE }?.asString()
     )
 
-    fun toInternal() = ESBlock(
+    fun toInternal(): ESBlock = ESBlock(
         id = id?.let { ESBlockId(it) } ?: ESBlockId.NONE,
         uuid = uuid ?: "",
         title = title ?: "",

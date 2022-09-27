@@ -16,7 +16,7 @@ import java.sql.SQLException
 import java.util.UUID
 
 class RepoBlockSQL(
-    url: String = "jdbc:postgresql://localhost:5432/esdb",
+    url: String = "jdbc:postgresql://localhost:6432/esdb",
     user: String = "es",
     password: String = "es-pass",
     schema: String = "es",
@@ -37,8 +37,11 @@ class RepoBlockSQL(
     private fun save(item: ESBlock): DBBlockResponse {
         return safeTransaction({
             val response = BlockTable.insert {
+                println("DBBlockResponse save ${it}")
                 if (item.id != ESBlockId.NONE)
                     it[id] = item.id.asString()
+                else
+                    it[id] = generateUuid()
                 it[title] = item.title
                 it[author] = item.author
                 it[content] = item.content
@@ -56,7 +59,8 @@ class RepoBlockSQL(
     }
 
     override suspend fun createBlock(request: DBBlockRequest): DBBlockResponse {
-        val block = request.block.copy(lock = ESBlockLock(UUID.randomUUID().toString()))
+        val block = request.block.copy(lock = ESBlockLock(UUID.randomUUID().toString()), id = ESBlockId(generateUuid()))
+        println("repo createBlock ${block}")
         return mutex.withLock {
             save(block)
         }

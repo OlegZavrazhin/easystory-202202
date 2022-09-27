@@ -11,6 +11,7 @@ fun ICorChainDsl<EasyStoryContext>.copyToValidationField() = worker {
     handle {
         blockCopyForValidation = blockRequest.deepCopy()
     }
+    println("debug")
 }
 
 fun ICorChainDsl<EasyStoryContext>.checkEmptyId() = worker {

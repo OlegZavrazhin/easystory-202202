@@ -55,6 +55,7 @@ dependencies {
 
     implementation(project(":easystory-common"))
     implementation(project(":easystory-api-jackson"))
+    implementation(project(":easystory-api-kmp"))
     implementation(project(":easystory-mappers-v1"))
     implementation(project(":easystory-services"))
     implementation(project(":easystory-stubs"))

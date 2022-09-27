@@ -11,7 +11,7 @@ fun main(settings: ESSettings? = null) {
     val corSettings by lazy {
         settings ?: ESSettings(
             repoTest = BlockRepoInMemory(),
-            repoProd = RepoBlockSQL(url = "jdbc:postgresql://localhost:5432/esdb")
+            repoProd = RepoBlockSQL(url = "jdbc:postgresql://localhost:6432/esdb")
         )
     }
 
