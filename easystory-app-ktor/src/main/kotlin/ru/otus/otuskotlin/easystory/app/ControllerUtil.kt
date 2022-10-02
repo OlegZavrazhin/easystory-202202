@@ -16,29 +16,48 @@ import ru.otus.otuskotlin.easystory.common.models.ESProcess
 import ru.otus.otuskotlin.easystory.common.models.asInternalError
 import ru.otus.otuskotlin.easystory.mappers.jackson.fromTransport
 import ru.otus.otuskotlin.easystory.mappers.jackson.toTransportBlock
-import ru.otus.otuskotlin.easystory.api.kmp.v1.responseSerialize
+import ru.otus.otuskotlin.easystory.logging.ESLogWrapper
+import ru.otus.otuskotlin.easystory.logs.mapper.toLog
 
 suspend inline fun <reified Q : IRequest, reified R : IResponse> ApplicationCall.controllerUtil(
+    logger: ESLogWrapper,
+    logId: String,
     process: ESProcess,
-    // some function to run
     principal: ESBlockPrincipalMode,
-    block: EasyStoryContext.() -> Unit
+    // crossinline
+    crossinline block: suspend EasyStoryContext.() -> Unit
 ) {
     val context = EasyStoryContext(
         timeStart = Clock.System.now()
     )
 
     try {
-        val request = receiveText()
-        context.fromTransport(apiRequestDeserialize<Q>(request))
-        context.block()
-        val response = context.toTransportBlock()
-//        respondText(responseSerialize(response), ContentType.Application.Json)
-        respondText(apiResponseSerialize(response), ContentType.Application.Json)
+        logger.doWithLogging(logId) {
+
+            val request = receiveText()
+            context.fromTransport(apiRequestDeserialize<Q>(request))
+            logger.info(
+                msg = "$process is handling",
+                data = context.toLog("$logId is handling")
+            )
+            context.block()
+            logger.info(
+                msg = "$process has been handled",
+                data = context.toLog("$logId has been handled")
+            )
+            val response = context.toTransportBlock()
+
+            respondText(apiResponseSerialize(response), ContentType.Application.Json)
+        }
     } catch (e: Throwable) {
         process.also { context.process = it }
         context.state = CORState.FAILING
         context.errors.add(e.asInternalError())
+        logger.error(
+            msg = "$process has failed",
+            e = e,
+            data = context.toLog("${logId}-error")
+        )
         context.block()
         val response = context.toTransportBlock()
         respondText(apiResponseSerialize(response), ContentType.Application.Json)
