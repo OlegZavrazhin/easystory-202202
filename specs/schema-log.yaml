@@ -1,0 +1,90 @@
+openapi: "3.0.4"
+info:
+  title: Block log models
+  description: Log models for logging services
+  version: 1.0.0
+
+paths:
+  /log:
+    get:
+      responses:
+        '200':
+          description: logs
+          content: {}
+
+components:
+  schemas:
+    BlockLogModel:
+      title: Block log model
+      type:  object
+      properties:
+        requestId:
+          type: string
+        requestBlock:
+          $ref: '#/components/schemas/BlockLog'
+        requestFilter:
+          $ref: '#/components/schemas/BlockFilterLog'
+        responseBlock:
+          $ref: '#/components/schemas/BlockLog'
+        responseBlocks:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockLog'
+
+    BlockLog:
+      title: requestBlock and responseBlock
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+          example: 'FairyTail'
+        author:
+          type: string
+          example: 'Ivan Petrov'
+        content:
+          type: string
+          description: Content full from WYSIWYG
+          example: '<p>Lorem <strong>ipsum</strong><p>'
+
+    BlockFilterLog:
+      title: Filter log model
+      properties:
+        searchString:
+          type: string
+          description: строка для поиска
+
+    ErrorLogModel:
+      title: Error log model
+      type: object
+      properties:
+        message:
+          type: string
+        field:
+          type: string
+        code:
+          type: string
+        level:
+          type: string
+
+    CommonLogModel:
+      title: Common log model
+      description: Common log model for whole project
+      type: object
+      properties:
+        messageId:
+          type: string
+        messageTime:
+          type: string
+        logId:
+          type: string
+        source:
+          type: string
+        block:
+          $ref: '#/components/schemas/BlockLogModel'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorLogModel'
+

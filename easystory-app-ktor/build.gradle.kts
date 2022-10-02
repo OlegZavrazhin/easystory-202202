@@ -62,6 +62,10 @@ dependencies {
     implementation(project(":easystory-repository-inmemory"))
     implementation(project(":easystory-repository-postgresql"))
 
+    implementation(project(":easystory-logging"))
+    implementation(project(":easystory-logs-mapper"))
+    implementation(project(":easystory-api-logs"))
+
     testImplementation(kotlin("test-junit"))
     testImplementation(ktor("test-host"))
     testImplementation(ktor("content-negotiation", prefix = "client-"))

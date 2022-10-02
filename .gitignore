@@ -2,3 +2,5 @@
 /.idea
 /.gradle
 /dockers/kfdata
+/dockers/elk/volumes/esdata/
+/dockers/elk/volumes/kfdata/

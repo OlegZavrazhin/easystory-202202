@@ -33,7 +33,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BlockReadRequest'
+                $ref: '#/components/schemas/BlockReadRequest' #FIXME: BlockReadResponse
   /blocks/create:
     post:
       tags:
@@ -190,10 +190,10 @@ components:
       discriminator:
         propertyName: responseType
         mapping:
-#          create: '#/components/schemas/BlockCreateResponse'
-#          read: '#/components/schemas/BlockReadResponse'
-#          update: '#/components/schemas/BlockUpdateResponse'
-#          delete: '#/components/schemas/BlockDeleteResponse'
+          create: '#/components/schemas/BlockCreateResponse'
+          read: '#/components/schemas/BlockReadResponse'
+          update: '#/components/schemas/BlockUpdateResponse'
+          delete: '#/components/schemas/BlockDeleteResponse'
           search: '#/components/schemas/BlockSearchResponse'
 
 
